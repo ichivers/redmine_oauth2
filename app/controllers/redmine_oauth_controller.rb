@@ -34,7 +34,7 @@ class RedmineOauthController < AccountController
         #Rails.logger.info "o=> code #{token}"
 
         result = token.get(settings[:oauth2_info])
-        info = JSON.parse(result.body)
+        info = JSON.parse(JSON.parse(result.body))
 
         root_path = settings[:info_root].split(",")
         root_path.each_with_index do |key, i|
@@ -59,7 +59,12 @@ class RedmineOauthController < AccountController
         session.delete(:back_url)
         
         email = info[settings[:email_key]]
-
+        begin
+            email = info.select {|x| x['Type'] == settings[:email_key]}.first['Value']
+        rescue error
+            Rails.logger.error "error => #{error.message}"
+        end
+        
         fname = ""
         lname = ""
         if settings[:fname_key].length > 0 && settings[:lname_key].length <= 0

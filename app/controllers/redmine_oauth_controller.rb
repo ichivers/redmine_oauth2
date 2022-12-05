@@ -46,6 +46,13 @@ class RedmineOauthController < AccountController
             info = info[key]
         end
 
+        email = info[settings[:email_key]]
+        begin
+            email = info.select {|x| x['Type'] == settings[:email_key]}.first['Value']
+        rescue error
+            Rails.logger.error "error => #{error.message}"
+        end
+        
         if info && info[settings[:email_key]]
             try_to_login info
         else

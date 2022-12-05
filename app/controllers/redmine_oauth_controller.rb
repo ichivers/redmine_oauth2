@@ -48,11 +48,15 @@ class RedmineOauthController < AccountController
 
         email = info[settings[:email_key]]
 
-        if info && info.select {|x| x['Type'] == settings[:email_key]}.count > 0
-            try_to_login info
-        else
-            flash[:error] = l(:notice_access_denied)
-            redirect_to signin_path
+        begin
+            if info && info.select {|x| x['Type'] == settings[:email_key]}.count > 0
+                try_to_login info
+            else
+                flash[:error] = l(:notice_access_denied)
+                redirect_to signin_path
+            end
+        rescue error
+            Rails.logger.error "error => #{error.message}"
         end
     end
 

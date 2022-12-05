@@ -1,12 +1,5 @@
 ## This is a general oauth 2.0 login redmine5.0 plug-in
 
-![](doc/img/settings.png)
-![](doc/img/login.png)
-
-
-## 0.0.1  Only oauth2.0 with all APIs under the same domain name is supported
-## 0.0.2  Support user information under the new domain name
-
 ## google oauth2
 - 0.0.1 not super
 - Host: https://accounts.google.com
@@ -21,7 +14,7 @@
 ```console
 apt-get install -y make gcc git | yum install -y make gcc git
 cd x/redmine/plugins
-git clone https://github.com/nomadli/redmine_oauth2
+git clone https://github.com/ichivers/redmine_oauth2
 cd x/redmine
 bundle install --without development test
 rake redmine:plugins:migrate RAILS_ENV=production

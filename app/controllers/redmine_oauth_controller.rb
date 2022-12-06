@@ -46,16 +46,16 @@ class RedmineOauthController < AccountController
             info = info[key]
         end
 
-        email = info[settings[:email_key]]
+        email = info.find {|x| x['Type'] == settings[:email_key]}
 
         begin
-            if info && info.select {|x| x['Type'] == settings[:email_key]}.count > 0
+            if info && email['Value']
                 try_to_login info
             else
                 flash[:error] = l(:notice_access_denied)
                 redirect_to signin_path
             end
-        rescue error
+        rescue 
             Rails.logger.error "error => #{error.message}"
         end
     end
@@ -64,17 +64,12 @@ class RedmineOauthController < AccountController
         params[:back_url] = session[:back_url]
         session.delete(:back_url)
         
-        email = info[settings[:email_key]]
-        begin
-            email = info.select {|x| x['Type'] == settings[:email_key]}.first['Value']
-        rescue error
-            Rails.logger.error "error => #{error.message}"
-        end
+        email = info.find {|x| x['Type'] == settings[:email_key]}['Value']
         
         fname = ""
         lname = ""
         if settings[:fname_key].length > 0 && settings[:lname_key].length <= 0
-            fname, lname = info[settings[:fname_key]].split(' ') unless info[settings[:fname_key]].nil?
+            fname, lname = info.find {|x| x['Type'] == settings[:fname_key]}['Value'].split(' ') unless info.find {|x| x['Type'] == settings[:fname_key]}['Value'].nil?
         elsif settings[:fname_key].length > 0
             fname = info[settings[:fname_key]]
         end 

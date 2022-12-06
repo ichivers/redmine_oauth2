@@ -56,7 +56,7 @@ class RedmineOauthController < AccountController
                 redirect_to signin_path
             end
         rescue 
-            Rails.logger.error "error => #{error.message}"
+            Rails.logger.info "error occurred"
         end
     end
 

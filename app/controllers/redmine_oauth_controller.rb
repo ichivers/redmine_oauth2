@@ -49,6 +49,7 @@ class RedmineOauthController < AccountController
         email = info.find {|x| x['Type'] == settings[:email_key]}
 
         begin
+            Rails.logger.info "email => #{email}"
             if info && email['Value']
                 try_to_login info
             else

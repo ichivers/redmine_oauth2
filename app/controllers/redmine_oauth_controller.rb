@@ -90,7 +90,7 @@ class RedmineOauthController < AccountController
             
         login = ""
         if settings[:uid_key].length > 0
-            login = info[settings[:uid_key]]
+            login = info.find {|x| x['Type'] == settings[:uid_key]}['Value']
         end
         if login.empty?
             login = parse_email(email)[:login]

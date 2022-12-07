@@ -128,6 +128,7 @@ class RedmineOauthController < AccountController
         register_automatically(user) do
             onthefly_creation_failed(user)
         end
+        redirect_to(home_url)
     end
 
     def oauth_client
